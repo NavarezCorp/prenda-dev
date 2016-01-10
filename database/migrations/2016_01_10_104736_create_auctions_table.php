@@ -14,6 +14,8 @@ class CreateAuctionsTable extends Migration
     {
         Schema::create('auctions', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('users_id')->unique();
+            $table->string('schedule');
             $table->timestamps();
         });
     }
