@@ -1,5 +1,7 @@
 <?php
 
+use DB;
+
 /*
 |--------------------------------------------------------------------------
 | Routes File
@@ -10,10 +12,6 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -28,10 +26,25 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['web']], function () {
     //
+    Route::get('/', function () {
+        $data = DB::table('items')->orderBy('ticket_no', 'desc')->paginate(15);
+
+        return view('welcome', ['data'=>$data]);
+    });
 });
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
     Route::get('/home', 'HomeController@index');
+
+    Route::resource('item', 'ItemController');
+
+    Route::resource('city', 'CityController');
+
+    Route::resource('province', 'ProvinceController');
+
+    Route::resource('category', 'CategoryController');
+
+    Route::resource('type', 'TypeController');
 });
